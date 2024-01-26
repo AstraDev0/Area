@@ -1,0 +1,29 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [init]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Set up Node.js environment
+        run: |
+          cd server
+          npm install
+          npm ci
+          npm start

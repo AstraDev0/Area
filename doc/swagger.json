@@ -1,0 +1,711 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Reactobot API",
+        "version": "1.0.0",
+        "description": "API used to interact within the Reactobot."
+    },
+    "tags": [
+        {
+            "name": "Local Auth",
+            "description": "Endpoints for local (email and password) authentication"
+        },
+        {
+            "name": "Google Auth",
+            "description": "Endpoints for Google authentication"
+        },
+        {
+            "name": "About",
+            "description": "Information about the API and custom services."
+        },
+        {
+            "name": "Authentication",
+            "description": "Endpoints for user authentication"
+        },
+        {
+            "name": "Services",
+            "description": "Endpoints for connecting and managing third-party services"
+        },
+        {
+            "name": "Project",
+            "description": "Endpoints for managing user projects and actions/reactions"
+        },
+        {
+            "name": "Users",
+            "description": "Endpoints for user information and management"
+        }
+    ],
+    "paths": {
+        "/about.json": {
+            "get": {
+                "summary": "Get information about the API and services",
+                "tags": [
+                    "About"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response with client and server information",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "client": {
+                                        "host": "127.0.0.1"
+                                    },
+                                    "server": {
+                                        "current_time": 1639496700,
+                                        "services": [
+                                            {
+                                                "name": "YourServiceName",
+                                                "actions": [
+                                                    {
+                                                        "name": "ActionName",
+                                                        "description": "Description of the action"
+                                                    }
+                                                ],
+                                                "reactions": [
+                                                    {
+                                                        "name": "ReactionName",
+                                                        "description": "Description of the reaction"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/google": {
+            "summary": "Google authentication routes",
+            "description": "Routes for authenticating users with Google",
+            "/auth/google/url": {
+                "$ref": "#/components/pathItems/authGoogleUrl"
+            },
+            "/auth/google/callback": {
+                "$ref": "#/components/pathItems/authGoogleCallback"
+            }
+        },
+        "/auth/echo": {
+            "get": {
+                "summary": "Get user information",
+                "description": "Retrieve user information based on the provided authentication token.",
+                "tags": [
+                    "Authentication"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response with user information",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_id": "65a3cb4b8e439f2a6fd46325",
+                                    "name": "dqsqsdqsdqsdqsdqsd",
+                                    "email": "qsdqsdqghffghfgqsdqsdqsdhfghsqsdqsdqerersdsd@gmail.comrtyrty",
+                                    "isGoogleAuth": false,
+                                    "isMobile": false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "summary": "Logout",
+                "description": "Logout the currently authenticated user.",
+                "tags": [
+                    "Authentication"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User logged out successfully.",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "Logged out"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/services": {
+            "get": {
+                "summary": "Get information about connected services",
+                "tags": [
+                    "Services"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response with information about connected services",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "discord": {
+                                        "redirect": "https://discord.com/api/oauth2/authorize?client_id=1073016730911248504&permissions=292057987072&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fservices%2Fdiscord%2Fcallback&scope=identify+bot"
+                                    },
+                                    "spotify": {
+                                        "redirect": "https://accounts.spotify.com/authorize?client_id=24521d4cf7574abf873895f7def9ba0d&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fservices%2Fspotify%2Fcallback&scope=user-library-read+user-read-recently-played+user-top-read+playlist-read-private+playlist-read-collaborative"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/services/discord/callback": {
+            "get": {
+                "summary": "Callback endpoint for Discord authentication",
+                "tags": [
+                    "Services"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response after Discord authentication"
+                    }
+                }
+            }
+        },
+        "/services/spotify/callback": {
+            "get": {
+                "summary": "Callback endpoint for Spotify authentication",
+                "tags": [
+                    "Services"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response after Spotify authentication"
+                    }
+                }
+            }
+        },
+        "/services/google/callback": {
+            "get": {
+                "summary": "Handle Google Auth callback",
+                "tags": [
+                    "Google Auth Callback"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "description": "Authorization code received from Google",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful connection with a message"
+                    },
+                    "401": {
+                        "description": "Unauthorized if authentication token is missing or invalid"
+                    },
+                    "404": {
+                        "description": "User not found with error message"
+                    },
+                    "500": {
+                        "description": "Internal server error with error message"
+                    }
+                }
+            }
+        },
+        "/project": {
+            "post": {
+                "summary": "Create a new area (project) with specified action and reaction",
+                "tags": [
+                    "Project"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Object containing action and reaction details",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "action": {
+                                        "type": "object",
+                                        "properties": {
+                                            "description": {
+                                                "type": "string"
+                                            },
+                                            "service": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "data": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "reaction": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "service": {
+                                                    "type": "string"
+                                                },
+                                                "description": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "data": {
+                                                    "type": "object"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successfully created area (project)"
+                    },
+                    "400": {
+                        "description": "Bad Request - Invalid input or failed to create area"
+                    }
+                }
+            },
+            "get": {
+                "summary": "Get all areas (projects) for the authenticated user",
+                "tags": [
+                    "Project"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response with an array of areas (projects)",
+                        "content": {
+                            "application/json": {
+                                "example": [
+                                    {
+                                        "userId": "user_id",
+                                        "action": {
+                                            "description": "test",
+                                            "service": "timer",
+                                            "name": "every_day",
+                                            "data": {
+                                                "hour": 3,
+                                                "minute": 59
+                                            }
+                                        },
+                                        "reaction": [
+                                            {
+                                                "service": "discord",
+                                                "description": "test",
+                                                "name": "post_message",
+                                                "data": {
+                                                    "id": "1096556203649282108",
+                                                    "body": "exemple"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "userId": "user_id",
+                                        "action": {
+                                            "description": "another_test",
+                                            "service": "another_timer",
+                                            "name": "every_minute",
+                                            "data": {
+                                                "hour": 2,
+                                                "minute": 30
+                                            }
+                                        },
+                                        "reaction": [
+                                            {
+                                                "service": "slack",
+                                                "description": "another_test",
+                                                "name": "send_message",
+                                                "data": {
+                                                    "channelId": "12345",
+                                                    "message": "Hello, World!"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/project/{id}": {
+            "put": {
+                "summary": "Update the specified area (project) with new action and reaction",
+                "tags": [
+                    "Project"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "ID of the area (project) to update",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Object containing updated action and reaction details",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "action": {
+                                        "type": "object",
+                                        "properties": {
+                                            "description": {
+                                                "type": "string"
+                                            },
+                                            "service": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "data": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "reaction": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "service": {
+                                                    "type": "string"
+                                                },
+                                                "description": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "data": {
+                                                    "type": "object"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated area (project)"
+                    },
+                    "400": {
+                        "description": "Bad Request - Invalid input or failed to update area"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete the specified area (project)",
+                "tags": [
+                    "Project"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "ID of the area (project) to delete",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successfully deleted area (project)"
+                    },
+                    "400": {
+                        "description": "Bad Request - Invalid input or failed to delete area"
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "summary": "Get user information",
+                "tags": [
+                    "Users"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response with user information",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_id": "user_id",
+                                    "name": "user_name",
+                                    "email": "user_email@example.com",
+                                    "services": [
+                                        {
+                                            "service_name": true
+                                        }
+                                    ],
+                                    "isGoogle": true,
+                                    "isMobile": false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/delete": {
+            "delete": {
+                "summary": "Delete the authenticated user",
+                "tags": [
+                    "Users"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of the user"
+                    },
+                    "400": {
+                        "description": "Could not delete user"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        },
+        "/auth/google/url": {
+            "get": {
+                "tags": [
+                    "Google Auth"
+                ],
+                "summary": "Get Google Auth URL",
+                "description": "Returns the URL to initiate the Google authentication process.",
+                "parameters": [
+                    {
+                        "name": "mobile",
+                        "in": "query",
+                        "description": "Indicates if the request is coming from a mobile device.",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Google Auth URL",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "url": "https://example.com/auth/google/callback?mobile=true"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/google/callback": {
+            "get": {
+                "tags": [
+                    "Google Auth"
+                ],
+                "summary": "Google Auth Callback",
+                "description": "Handles the callback from Google authentication and redirects accordingly.",
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "description": "The authorization code received from Google.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "mobile",
+                        "in": "query",
+                        "description": "Indicates if the request is coming from a mobile device.",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Redirects to the appropriate URL with an authentication token."
+                    },
+                    "400": {
+                        "description": "Bad request. Authorization code must be provided."
+                    },
+                    "500": {
+                        "description": "Server error during the authentication process."
+                    }
+                }
+            }
+        },
+        "/auth/local/sign-in": {
+            "post": {
+                "tags": [
+                    "Local Auth"
+                ],
+                "summary": "Sign In",
+                "description": "Authenticates a user using their email and password.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User successfully signed in."
+                    },
+                    "400": {
+                        "description": "Bad request. Email or password is invalid."
+                    },
+                    "500": {
+                        "description": "Server error during the sign-in process."
+                    }
+                }
+            }
+        },
+        "/auth/local/sign-up": {
+            "post": {
+                "tags": [
+                    "Local Auth"
+                ],
+                "summary": "Sign Up",
+                "description": "Registers a new user using their name, email, and password.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User successfully signed up."
+                    },
+                    "400": {
+                        "description": "Bad request. Name, email, or password is invalid."
+                    },
+                    "500": {
+                        "description": "Server error during the sign-up process."
+                    }
+                }
+            }
+        }
+    },
+    "components": {}
+}

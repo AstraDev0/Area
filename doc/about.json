@@ -1,0 +1,102 @@
+{
+    "client": {
+      "host": "::1"
+    },
+    "server": {
+      "current_time": 1706275010,
+      "services": [
+        {
+          "name": "discord",
+          "actions": [ ],
+          "reactions": [
+            {
+              "name": "post_message",
+              "description": "Posts a message in a specific location"
+            },
+            {
+              "name": "post_joke",
+              "description": "Post discord random joke message to a channel"
+            },
+            {
+              "name": "post_art",
+              "description": "Post discord random art from the met to a channel"
+            },
+            {
+              "name": "post_pokemon",
+              "description": "Post discord random pokemon to a channel"
+            }
+          ]
+        },
+        {
+          "name": "timer",
+          "actions": [
+            {
+              "name": "every_day",
+              "description": "Triggers every hour"
+            },
+            {
+              "name": "every_month",
+              "description": "Triggers every day"
+            },
+            {
+              "name": "at_specific_date_time",
+              "description": "Trigger a reaction on the day you want"
+            }
+          ],
+          "reactions": [ ]
+        },
+        {
+          "name": "spotify",
+          "actions": [
+            {
+              "name": "last_playlist",
+              "description": "Triggers when a is added"
+            },
+            {
+              "name": "last_song",
+              "description": "Triggers when a playlist is added"
+            },
+            {
+              "name": "last_album",
+              "description": "Triggers when a is added"
+            }
+          ],
+          "reactions": [ ]
+        },
+        {
+          "name": "gmail",
+          "actions": [
+            {
+              "name": "last_mail",
+              "description": "Triggers when a new mail is got"
+            },
+            {
+              "name": "last_mail_from_someone",
+              "description": "Triggers when a new mail is got from someone"
+            }
+          ],
+          "reactions": [
+            {
+              "name": "send_mail",
+              "description": "Send an email "
+            }
+          ]
+        },
+        {
+          "name": "drive",
+          "actions": [
+            {
+              "name": "get_folder_action",
+              "description": "Get action from a folder"
+            }
+          ],
+          "reactions": [
+            {
+              "name": "new_file",
+              "description": "Create a new file in a folder"
+            }
+          ]
+        }
+      ]
+    }
+  }

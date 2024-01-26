@@ -1,0 +1,86 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ Feature/ci-cd ]
+  pull_request:
+    branches: [ Feature/ci-cd ]
+
+jobs:
+  check-server:
+    name: Check Server
+    runs-on: ubuntu-latest
+    container: node:16
+    steps:
+      - uses: actions/checkout@v3
+      - name: Change directory and install dependencies
+        run: |
+          cd server
+          npm install
+      - name: Lint
+        run: |
+          cd server
+          npm run lint
+
+  check-mobile:
+    name: check mobile
+    runs-on: ubuntu-latest
+    container: cirrusci/flutter:latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Change directory and get dependencies
+        run: |
+          cd client_mobile
+          flutter pub get
+      - name: Analyze
+        run: flutter analyze
+  
+
+  check-web:
+    name: Check Web
+    runs-on: ubuntu-latest
+    container: node:16
+    steps:
+      - uses: actions/checkout@v3
+      - name: Change directory and install dependencies
+        run: |
+          cd client_web
+          npm install
+
+  build-web:
+    name: build web
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Docker image for client web
+        run: docker build -t client_web:latest ./client_web
+
+  build-mobile:
+    name: build mobile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Docker image for client mobile
+        run: docker build -t client_mobile:latest ./client_mobile
+
+  build-server:
+    name: build server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Docker image for server
+        run: |
+          docker build -t server:latest ./server
+
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy
+        run: |
+          docker-compose down -v
+          echo "Deploying with Docker Compose"
+          docker-compose up -d
+
+
